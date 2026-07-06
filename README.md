@@ -54,3 +54,4 @@ Notes:
 ## Deploying
 
 Push to GitHub, then in the repo go to Settings → Pages → set source to the default branch, root folder. The site will be served at your repo's Pages URL, rendering `index.html`.
+
