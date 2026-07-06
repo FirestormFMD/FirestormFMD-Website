@@ -94,6 +94,24 @@
       "link": "downloads", "linkText": "Full changelog"
     }
   ],
+  "source": [
+    { "id": "firestorm-core", "name": "firestorm-core", "desc": "Main mod — storm engine, particles and config.", "meta": "Java · GPL-3.0", "url": null },
+    { "id": "firestorm-extras", "name": "firestorm-extras", "desc": "Add-on content packs and compatibility patches.", "meta": "Java · GPL-3.0", "url": null },
+    { "id": "fmd-site", "name": "fmd-site", "desc": "This website.", "meta": "JS · GPL-3.0", "url": "https://github.com/FirestormFMD/FirestormFMD-Website" }
+  ],
+  "site": {
+    "name": "FirestormFMD",
+    "title": "FirestormFMD",
+    "tagline": "Mods, tools and updates for Minecraft — everything beyond the Modrinth page lives here.",
+    "font": "sans",
+    "bg": "#1a1f27",
+    "textColor": "#dee4ec",
+    "titleColor": "#dee4ec",
+    "titleSize": 40,
+    "taglineColor": "#8b95a5",
+    "taglineSize": 16,
+    "align": "center"
+  },
   "bugs": [
     { "id": "#41", "title": "Storm audio stutters with Sodium 0.6 on some AMD cards", "status": "OPEN", "meta": "v2.4.1 · 2 days ago" },
     { "id": "#40", "title": "Ion haze particles render through walls", "status": "IN PROGRESS", "meta": "v2.4.0 · 5 days ago" },

@@ -243,11 +243,26 @@ async function listDirOrEmpty(path) {
 }
 
 /* ================= Data load / save ================= */
+const SITE_DEFAULTS = {
+  name: "FirestormFMD",
+  title: "FirestormFMD",
+  tagline: "Mods, tools and updates for Minecraft — everything beyond the Modrinth page lives here.",
+  font: "sans",
+  bg: "#1a1f27",
+  textColor: "#dee4ec",
+  titleColor: "#dee4ec",
+  titleSize: 40,
+  taglineColor: "#8b95a5",
+  taglineSize: 16,
+  align: "center"
+};
+
 async function loadData() {
   const f = await getFile(DATA_PATH);
   dataSha = f.sha;
   db = JSON.parse(b64DecodeText(f.content));
-  ["mods", "modpacks", "wips", "updates", "bugs"].forEach(k => { if (!Array.isArray(db[k])) db[k] = []; });
+  ["mods", "modpacks", "wips", "updates", "bugs", "source"].forEach(k => { if (!Array.isArray(db[k])) db[k] = []; });
+  db.site = { ...SITE_DEFAULTS, ...(db.site || {}) };
 }
 
 async function saveData(message) {
@@ -383,7 +398,8 @@ $("#logoutBtn").addEventListener("click", () => {
 /* ================= Main app shell ================= */
 const TABS = [
   ["mods", "Mods"], ["modpacks", "Modpacks"], ["wips", "WIPs"],
-  ["updates", "Updates"], ["bugs", "Bugs"], ["json", "Raw JSON"]
+  ["updates", "Updates"], ["bugs", "Bugs"], ["source", "Source"],
+  ["site", "Site"], ["json", "Raw JSON"]
 ];
 
 function renderApp() {
@@ -407,6 +423,8 @@ function renderTab() {
   else if (activeTab === "wips") renderWips(body);
   else if (activeTab === "updates") renderUpdates(body);
   else if (activeTab === "bugs") renderBugs(body);
+  else if (activeTab === "source") renderSource(body);
+  else if (activeTab === "site") renderSite(body);
   else renderRawJson(body);
 }
 
@@ -961,6 +979,151 @@ function editBug(i) {
   });
 }
 
+/* ================= Source tab ================= */
+function renderSource(body) {
+  body.innerHTML = `
+    <div class="row" style="margin-bottom:16px">
+      <span class="muted">Repository cards on the Source page. Entries without a URL show "No link yet".</span>
+      <span style="margin-left:auto"></span>
+      <button class="btn" id="addSrc">+ New source link</button>
+    </div>
+    ${db.source.map((s, i) => `
+      <div class="card"><div class="row">
+        <div class="grow">
+          <div class="row" style="gap:9px"><b class="mono" style="font-size:13.5px">${esc(s.name)}</b><span class="pill ${s.url ? "green" : "amber"}">${s.url ? "linked" : "no link"}</span></div>
+          <div class="muted" style="margin-top:5px">${esc(s.desc)}</div>
+          <div class="faint mono" style="margin-top:5px">${esc(s.meta || "")}${s.url ? " · " + esc(s.url) : ""}</div>
+        </div>
+        <button class="btn small" data-act="edit" data-i="${i}">Edit</button>
+        <button class="btn small danger" data-act="del" data-i="${i}">Delete</button>
+      </div></div>`).join("") || `<p class="muted">No source links yet.</p>`}`;
+  $("#addSrc", body).addEventListener("click", () => editSource(null));
+  body.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => {
+    const i = +b.dataset.i;
+    if (b.dataset.act === "edit") return editSource(i);
+    if (!confirm(`Delete "${db.source[i].name}"? (Takes effect on Save.)`)) return;
+    db.source.splice(i, 1);
+    markDirty(); renderTab();
+  }));
+}
+
+function editSource(i) {
+  const isNew = i == null;
+  const s = isNew ? { id: "", name: "", desc: "", meta: "Java · GPL-3.0", url: null } : db.source[i];
+  const modal = openModal(`
+    <h2>${isNew ? "New source link" : "Edit — " + esc(s.name)}</h2>
+    <div class="grid2">
+      <div><label>Repo name <span class="hint">e.g. firestorm-core</span></label><input data-f="name" value="${esc(s.name)}"></div>
+      <div><label>Meta <span class="hint">e.g. Java · GPL-3.0</span></label><input data-f="meta" value="${esc(s.meta || "")}"></div>
+    </div>
+    <label>Description</label>
+    <textarea data-f="desc" style="min-height:52px">${esc(s.desc)}</textarea>
+    <label>Repository URL <span class="hint">— leave empty to show "No link yet"</span></label>
+    <input data-f="url" value="${esc(s.url || "")}" placeholder="https://github.com/…">
+    <div class="row" style="margin-top:22px">
+      <span style="margin-left:auto"></span>
+      <button class="btn" data-role="cancel">Cancel</button>
+      <button class="btn primary" data-role="ok">${isNew ? "Add link" : "Apply"}</button>
+    </div>`);
+  modal.querySelector('[data-role="cancel"]').addEventListener("click", closeModal);
+  modal.querySelector('[data-role="ok"]').addEventListener("click", () => {
+    const g = (k) => modal.querySelector(`[data-f="${k}"]`).value.trim();
+    if (!g("name")) return toast("Repo name is required.", "err");
+    const url = g("url");
+    if (url && !/^https?:\/\//.test(url)) return toast("URL must start with http(s)://", "err");
+    Object.assign(s, { name: g("name"), desc: g("desc"), meta: g("meta"), url: url || null });
+    s.id = s.id || slugify(s.name);
+    if (isNew) db.source.push(s);
+    markDirty(); closeModal(); renderTab();
+  });
+}
+
+/* ================= Site tab ================= */
+function renderSite(body) {
+  const s = db.site = { ...SITE_DEFAULTS, ...(db.site || {}) };
+  const colorField = (key, label) => `
+    <div><label>${label}</label>
+      <div class="row" style="flex-wrap:nowrap;gap:8px">
+        <input type="color" data-sc="${key}" value="${esc(s[key])}" style="width:44px;height:36px;padding:3px;flex:none;cursor:pointer">
+        <input type="text" data-s="${key}" value="${esc(s[key])}" class="mono">
+      </div>
+    </div>`;
+  body.innerHTML = `
+    <p class="muted" style="margin-top:0">Site-wide text and styling. Changes apply everywhere on <b>Save &amp; publish</b>.</p>
+    <div class="card">
+      <h3 style="margin:4px 0 0;font-size:15px;color:var(--blue-soft)">Text</h3>
+      <div class="grid2">
+        <div><label>Site name <span class="hint">— topbar &amp; footer</span></label><input data-s="name" value="${esc(s.name)}"></div>
+        <div><label>Home title <span class="hint">— big heading</span></label><input data-s="title" value="${esc(s.title)}"></div>
+      </div>
+      <label>Home tagline</label>
+      <textarea data-s="tagline" style="min-height:52px">${esc(s.tagline)}</textarea>
+    </div>
+    <div class="card">
+      <h3 style="margin:4px 0 0;font-size:15px;color:var(--blue-soft)">Font &amp; layout</h3>
+      <div class="grid3">
+        <div><label>Font</label>
+          <select data-s="font">
+            <option value="sans" ${s.font === "sans" ? "selected" : ""}>Instrument Sans (default)</option>
+            <option value="mono" ${s.font === "mono" ? "selected" : ""}>JetBrains Mono</option>
+            <option value="serif" ${s.font === "serif" ? "selected" : ""}>Serif (Georgia)</option>
+            <option value="system" ${s.font === "system" ? "selected" : ""}>System UI</option>
+          </select></div>
+        <div><label>Title size <span class="hint">px</span></label><input data-s="titleSize" type="number" min="16" max="96" value="${esc(s.titleSize)}"></div>
+        <div><label>Tagline size <span class="hint">px</span></label><input data-s="taglineSize" type="number" min="10" max="40" value="${esc(s.taglineSize)}"></div>
+      </div>
+      <div class="grid3">
+        <div><label>Home text position</label>
+          <select data-s="align">
+            <option value="left" ${s.align === "left" ? "selected" : ""}>Left</option>
+            <option value="center" ${s.align === "center" ? "selected" : ""}>Center</option>
+            <option value="right" ${s.align === "right" ? "selected" : ""}>Right</option>
+          </select></div>
+        <div></div><div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin:4px 0 0;font-size:15px;color:var(--blue-soft)">Colours</h3>
+      <div class="grid2">
+        ${colorField("bg", "Background")}
+        ${colorField("textColor", "Main text")}
+        ${colorField("titleColor", "Home title")}
+        ${colorField("taglineColor", "Home tagline")}
+      </div>
+    </div>
+    <div class="row">
+      <span class="faint">These only cover the basics — anything deeper still means editing the site bundle.</span>
+      <span style="margin-left:auto"></span>
+      <button class="btn danger" id="siteReset">Reset to defaults</button>
+    </div>`;
+
+  const numeric = { titleSize: 1, taglineSize: 1 };
+  body.querySelectorAll("[data-s]").forEach(el => {
+    el.addEventListener("input", () => {
+      const k = el.dataset.s;
+      const v = el.value.trim();
+      db.site[k] = numeric[k] ? (parseInt(v, 10) || SITE_DEFAULTS[k]) : v;
+      // keep the swatch in sync when a valid hex is typed
+      const pick = body.querySelector(`[data-sc="${k}"]`);
+      if (pick && /^#[0-9a-fA-F]{6}$/.test(v)) pick.value = v;
+      markDirty();
+    });
+  });
+  body.querySelectorAll("[data-sc]").forEach(pick => {
+    pick.addEventListener("input", () => {
+      const k = pick.dataset.sc;
+      db.site[k] = pick.value;
+      body.querySelector(`[data-s="${k}"]`).value = pick.value;
+      markDirty();
+    });
+  });
+  $("#siteReset", body).addEventListener("click", () => {
+    if (!confirm("Reset all site settings to their defaults? (Takes effect on Save.)")) return;
+    db.site = { ...SITE_DEFAULTS };
+    markDirty(); renderTab();
+  });
+}
+
 /* ================= Raw JSON tab ================= */
 function renderRawJson(body) {
   body.innerHTML = `
@@ -974,7 +1137,8 @@ function renderRawJson(body) {
   $("#applyRaw", body).addEventListener("click", () => {
     try {
       const parsed = JSON.parse($("#rawJson").value);
-      ["mods", "modpacks", "wips", "updates", "bugs"].forEach(k => { if (!Array.isArray(parsed[k])) parsed[k] = []; });
+      ["mods", "modpacks", "wips", "updates", "bugs", "source"].forEach(k => { if (!Array.isArray(parsed[k])) parsed[k] = []; });
+      parsed.site = { ...SITE_DEFAULTS, ...(parsed.site || {}) };
       db = parsed;
       markDirty();
       $("#rawStatus").textContent = "Applied — hit Save & publish to commit.";
