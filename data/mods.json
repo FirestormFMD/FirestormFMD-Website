@@ -1,104 +1,9 @@
 {
-  "mods": [
-    {
-      "id": "core", "name": "Firestorm Core", "initials": "FC", "accent": "blue",
-      "desc": "The main mod — storm engine, dynamic particles and in-game config.",
-      "featured": { "v": "v2.4.1", "mc": "1.21.4 – 1.21.6", "loader": "Fabric", "date": "July 2, 2026", "size": "412 KB", "file": null,
-        "notes": ["Fixed particle desync when playing on servers", "Added support for Minecraft 1.21.6", "Reduced idle memory use of the storm engine"],
-        "deps": [{ "name": "Fabric API", "ver": "≥ 0.102.0" }, { "name": "Cloth Config", "ver": "≥ 15.0.1" }, { "name": "Mod Menu (optional)", "ver": "≥ 11.0" }] },
-      "versions": [
-        { "v": "v2.4.0", "mc": "1.21.4 – 1.21.5", "date": "June 5, 2026", "size": "398 KB", "file": null,
-          "notes": ["New storm intensity system with per-biome settings", "Three new particle sets: ash, ember drift, ion haze", "Updated to Cloth Config 15"],
-          "deps": [{ "name": "Fabric API", "ver": "≥ 0.100.0" }, { "name": "Cloth Config", "ver": "≥ 15.0.0" }] },
-        { "v": "v2.3.2", "mc": "1.21 – 1.21.3", "date": "April 22, 2026", "size": "371 KB", "file": null,
-          "notes": ["Fixed crash when disabling storms mid-world", "Corrected config reset on version upgrade"],
-          "deps": [{ "name": "Fabric API", "ver": "≥ 0.96.0" }, { "name": "Cloth Config", "ver": "≥ 14.0.0" }] },
-        { "v": "v2.3.0", "mc": "1.21 – 1.21.2", "date": "March 14, 2026", "size": "365 KB", "file": null,
-          "notes": ["Storm scheduling API for pack makers", "Performance pass on particle culling", "Dropped 1.20.x support"],
-          "deps": [{ "name": "Fabric API", "ver": "≥ 0.96.0" }, { "name": "Cloth Config", "ver": "≥ 14.0.0" }] }
-      ]
-    },
-    {
-      "id": "extras", "name": "Firestorm Extras", "initials": "FE", "accent": "purple",
-      "desc": "Add-on content packs, extra particle sets and compatibility patches for Core.",
-      "featured": { "v": "v1.6.0", "mc": "1.21.4 – 1.21.6", "loader": "Fabric", "date": "June 28, 2026", "size": "286 KB", "file": null,
-        "notes": ["Added the aurora particle pack", "New config toggle for reduced-motion mode", "Compatibility patch for Sodium 0.6"],
-        "deps": [{ "name": "Firestorm Core", "ver": "≥ 2.4.0" }, { "name": "Fabric API", "ver": "≥ 0.102.0" }] },
-      "versions": [
-        { "v": "v1.5.1", "mc": "1.21 – 1.21.5", "date": "May 10, 2026", "size": "271 KB", "file": null,
-          "notes": ["Fixed missing textures on the ember pack", "Minor performance pass"],
-          "deps": [{ "name": "Firestorm Core", "ver": "≥ 2.3.0" }, { "name": "Fabric API", "ver": "≥ 0.100.0" }] },
-        { "v": "v1.5.0", "mc": "1.21 – 1.21.3", "date": "April 2, 2026", "size": "268 KB", "file": null,
-          "notes": ["First release of the ember particle pack", "Split extras out of Core"],
-          "deps": [{ "name": "Firestorm Core", "ver": "≥ 2.3.0" }, { "name": "Fabric API", "ver": "≥ 0.96.0" }] }
-      ]
-    },
-    {
-      "id": "lite", "name": "Firestorm Lite", "initials": "FL", "accent": "blue",
-      "desc": "A lightweight, particle-only build for low-end machines and large servers.",
-      "featured": { "v": "v0.9.2", "mc": "1.20.4 – 1.21.6", "loader": "Fabric", "date": "June 12, 2026", "size": "94 KB", "file": null,
-        "notes": ["Trimmed the storm engine to particles only", "No config dependency required", "Backported to 1.20.4"],
-        "deps": [{ "name": "Fabric API", "ver": "≥ 0.92.0" }] },
-      "versions": [
-        { "v": "v0.9.1", "mc": "1.20.4 – 1.21.3", "date": "April 18, 2026", "size": "91 KB", "file": null,
-          "notes": ["Fixed a rare crash on world load", "Lowered default particle cap"],
-          "deps": [{ "name": "Fabric API", "ver": "≥ 0.92.0" }] }
-      ]
-    }
-  ],
-  "modpacks": [
-    {
-      "id": "essentials", "name": "Firestorm Essentials", "initials": "ES", "accent": "blue",
-      "desc": "Core and Extras pre-configured together — the recommended starting point.",
-      "version": "v2.4.1", "mc": "1.21.4 – 1.21.6", "loader": "Fabric", "date": "July 2, 2026", "size": "698 KB", "file": null,
-      "includes": ["Firestorm Core 2.4.1", "Firestorm Extras 1.6.0", "Fabric API", "Cloth Config"]
-    },
-    {
-      "id": "performance", "name": "Firestorm Performance", "initials": "PF", "accent": "purple",
-      "desc": "Firestorm Lite with Sodium-friendly defaults for low-end machines and large servers.",
-      "version": "v0.9.2", "mc": "1.20.4 – 1.21.6", "loader": "Fabric", "date": "June 12, 2026", "size": "132 KB", "file": null,
-      "includes": ["Firestorm Lite 0.9.2", "Fabric API"]
-    }
-  ],
-  "wips": [
-    {
-      "id": "stormlink", "name": "Stormlink", "tagline": "Cross-server particle sync",
-      "stage": "preview 4", "percent": 70,
-      "note": "Syncs storm effects between linked servers. Networking works; config UI unfinished.",
-      "file": null, "size": null
-    },
-    {
-      "id": "firestorm3", "name": "Firestorm 3.0", "tagline": "Engine rewrite",
-      "stage": "design stage", "percent": 25,
-      "note": "Ground-up rewrite for better performance on large servers. No public build yet.",
-      "file": null, "size": null
-    }
-  ],
-  "updates": [
-    {
-      "id": "u3", "tag": "v2.4.1", "accent": "blue", "date": "July 2, 2026",
-      "title": "Server particle fix + MC 1.21.6",
-      "body": "Particle desync on servers is finally fixed — thanks to everyone who sent logs. This build also adds 1.21.6 support and trims idle memory use.",
-      "link": "downloads", "linkText": "Get it on Downloads"
-    },
-    {
-      "id": "u2", "tag": "WIP", "accent": "purple", "date": "June 18, 2026",
-      "title": "Stormlink preview 4 is out",
-      "body": "Cross-server sync now survives reconnects. Config UI is next — try it from the WIPs page and report anything odd on the bug tracker.",
-      "link": "wips", "linkText": "See WIPs"
-    },
-    {
-      "id": "u1", "tag": "v2.4.0", "accent": "blue", "date": "June 5, 2026",
-      "title": "Storm engine 2.4",
-      "body": "New storm intensity system, three new particle sets, and Cloth Config 15 support. See the full changelog on the downloads page.",
-      "link": "downloads", "linkText": "Full changelog"
-    }
-  ],
-  "source": [
-    { "id": "firestorm-core", "name": "firestorm-core", "desc": "Main mod — storm engine, particles and config.", "meta": "Java · GPL-3.0", "url": null },
-    { "id": "firestorm-extras", "name": "firestorm-extras", "desc": "Add-on content packs and compatibility patches.", "meta": "Java · GPL-3.0", "url": null },
-    { "id": "fmd-site", "name": "fmd-site", "desc": "This website.", "meta": "JS · GPL-3.0", "url": "https://github.com/FirestormFMD/FirestormFMD-Website" }
-  ],
+  "mods": [],
+  "modpacks": [],
+  "wips": [],
+  "updates": [],
+  "source": [],
   "site": {
     "name": "FirestormFMD",
     "title": "FirestormFMD",
@@ -112,12 +17,5 @@
     "taglineSize": 16,
     "align": "center"
   },
-  "bugs": [
-    { "id": "#41", "title": "Storm audio stutters with Sodium 0.6 on some AMD cards", "status": "OPEN", "meta": "v2.4.1 · 2 days ago" },
-    { "id": "#40", "title": "Ion haze particles render through walls", "status": "IN PROGRESS", "meta": "v2.4.0 · 5 days ago" },
-    { "id": "#39", "title": "Config screen crash without Mod Menu installed", "status": "IN PROGRESS", "meta": "v2.4.0 · 1 week ago" },
-    { "id": "#38", "title": "Particle desync on servers with >50 players", "status": "FIXED", "meta": "fixed in v2.4.1" },
-    { "id": "#36", "title": "Storms ignore per-biome intensity in the End", "status": "FIXED", "meta": "fixed in v2.4.0" },
-    { "id": "#33", "title": "Memory leak after long play sessions", "status": "FIXED", "meta": "fixed in v2.4.0" }
-  ]
+  "bugs": []
 }
