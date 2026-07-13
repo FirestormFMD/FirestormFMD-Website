@@ -14,20 +14,23 @@
       "size": "27.5 MB",
       "file": "files/packs/anarchy-modpack-x1/Anarchy-Modpack-X1-1.0.0.mrpack",
       "includes": []
-    }
-  ],
-  "wips": [
+    },
     {
-      "id": "nochatplus",
-      "name": "NoChatPlus",
-      "tagline": "",
-      "stage": "early",
-      "percent": 20,
-      "note": "",
-      "file": null,
-      "size": null
+      "id": "anarchy-lite",
+      "name": "Anarchy Lite",
+      "initials": "AL",
+      "accent": "purple",
+      "desc": "",
+      "version": "1.0.2.0",
+      "mc": "26.1.2",
+      "loader": "Fabric",
+      "date": "July 13, 2026",
+      "size": "4.4 MB",
+      "file": "files/packs/anarchy-lite/Anarchy-Lite-1.0.0.mrpack",
+      "includes": []
     }
   ],
+  "wips": [],
   "updates": [],
   "source": [],
   "site": {
