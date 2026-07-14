@@ -1,38 +1,45 @@
 {
-  "mods": [],
-  "modpacks": [
+  "mods": [
     {
-      "id": "anarchy-modpack-x1",
-      "name": "Anarchy Modpack X1",
-      "initials": "AM",
+      "id": "2b2t-atlas",
+      "name": "2b2t Atlas",
+      "initials": "AT",
       "accent": "blue",
-      "desc": "",
-      "version": "",
-      "mc": "26.2",
-      "loader": "Fabric",
-      "date": "July 7, 2026",
-      "size": "27.5 MB",
-      "file": "files/packs/anarchy-modpack-x1/Anarchy-Modpack-X1-1.0.0.mrpack",
-      "includes": []
-    },
-    {
-      "id": "anarchy-lite",
-      "name": "Anarchy Lite",
-      "initials": "AL",
-      "accent": "purple",
-      "desc": "",
-      "version": "1.0.2.0",
-      "mc": "26.1.2",
-      "loader": "Fabric",
-      "date": "July 13, 2026",
-      "size": "4.4 MB",
-      "file": "files/packs/anarchy-lite/Anarchy-Lite-1.0.0.mrpack",
-      "includes": []
+      "desc": "Shows an in game map of where all highways are, and adds a baritone feature to path to highways.",
+      "featured": {
+        "v": "1.0",
+        "mc": "1.21.4",
+        "loader": "Fabric",
+        "date": "July 14, 2026",
+        "size": "30 KB",
+        "file": "files/mods/2b2t-atlas/2b2tatlas.jar",
+        "notes": [],
+        "deps": [
+          {
+            "name": "Meteor Client",
+            "ver": ""
+          },
+          {
+            "name": "Baritone",
+            "ver": ""
+          }
+        ]
+      },
+      "versions": []
     }
   ],
+  "modpacks": [],
   "wips": [],
   "updates": [],
-  "source": [],
+  "source": [
+    {
+      "id": "2b2t-atlas",
+      "name": "2b2t-Atlas",
+      "desc": "",
+      "meta": "",
+      "url": "https://github.com/FirestormFMD/2b2t-Atlas"
+    }
+  ],
   "site": {
     "name": "FirestormFMD",
     "title": "FirestormFMD",
